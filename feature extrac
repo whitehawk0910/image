@@ -1,0 +1,27 @@
+import cv2
+
+# Load the image
+img = cv2.imread("image.jpg")
+
+# Convert the image to grayscale
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+# Detect edges using Canny edge detection
+edges = cv2.Canny(gray, 100, 200)
+
+# Detect corners using Harris corner detection
+corners = cv2.cornerHarris(gray, 2, 3, 0.04)
+
+# Threshold the corners to identify the strongest ones
+corners = cv2.threshold(corners, 0.01 * corners.max(), 255, cv2.THRESH_BINARY)[1]
+
+# Detect blobs using the Difference of Gaussian method
+blobs = cv2.threshold(cv2.absdiff(cv2.GaussianBlur(gray, (5, 5), 0), cv2.GaussianBlur(gray, (9, 9), 0)), 10, 255, cv2.THRESH_BINARY)[1]
+
+# Display the original image and the extracted features
+cv2.imshow("Original Image", img)
+cv2.imshow("Edges", edges)
+cv2.imshow("Corners", corners)
+cv2.imshow("Blobs", blobs)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
