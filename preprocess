@@ -1,0 +1,20 @@
+import cv2
+
+# Load the image
+img = cv2.imread("image.jpg")
+
+# Convert the image to grayscale
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+# Apply Gaussian filtering to remove noise
+blur = cv2.GaussianBlur(gray, (5, 5), 0)
+
+# Apply contrast stretching to improve image quality
+min_val, max_val, _, _ = cv2.minMaxLoc(blur)
+output = cv2.convertScaleAbs(blur, alpha=255.0/(max_val - min_val), beta=-min_val * 255.0 / (max_val - min_val))
+
+# Display the original and processed images
+cv2.imshow("Original Image", img)
+cv2.imshow("Processed Image", output)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
